@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Shield | Can I Run It? Interactive Analyzer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Tailwind Custom Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#0b0f19',
+              dark: '#0f172a',
+              card: '#1e293b',
+              border: '#334155',
+              blue: '#3b82f6',
+              cyan: '#06b6d4',
+              green: '#10b981',
+              neonGreen: '#39ff14',
+              red: '#ef4444',
+              purple: '#8b5cf6',
+              accent: '#f59e0b'
+            }
+          },
+          boxShadow: {
+            'neon-blue': '0 0 15px rgba(59, 130, 246, 0.5)',
+            'neon-cyan': '0 0 15px rgba(6, 182, 212, 0.5)',
+            'neon-green': '0 0 15px rgba(16, 185, 129, 0.5)',
+            'neon-red': '0 0 15px rgba(239, 68, 68, 0.5)',
+            'glow': '0 0 25px rgba(59, 130, 246, 0.15)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0b0f19;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    /* Neon Glow Animations */
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+    .pulse-glow-blue {
+      animation: pulse-glow 3s infinite;
+    }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-900">
+
+  <!-- TOP HEADER / NAVIGATION -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-gradient-to-tr from-blue-600 to-cyan-400 p-2.5 rounded-xl shadow-neon-blue">
+          <i class="fa-solid fa-microchip text-xl text-slate-950"></i>
+        </div>
+        <div>
+          <span class="text-2xl font-black tracking-widest bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">SYSTEM SHIELD</span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-widest">CAN YOU RUN IT PRO</span>
+        </div>
+      </div>
+
+      <!-- MY PC STATUS BAR -->
+      <div class="flex items-center gap-4">
+        <div id="quick-spec-status" class="hidden md:flex items-center gap-3 bg-slate-900/90 border border-slate-800 py-1.5 px-4 rounded-full text-xs">
+          <span class="flex h-2 w-2 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="text-slate-400">Your Rig: <strong id="quick-rig-name" class="text-cyan-400">Detecting...</strong></span>
+        </div>
+
+        <button onclick="openWizard()" id="setup-rig-btn" class="relative group overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-slate-950 text-xs font-bold py-2.5 px-5 rounded-xl transition duration-300 shadow-neon-blue flex items-center gap-2">
+          <i class="fa-solid fa-gamepad text-slate-950"></i>
+          <span class="text-slate-950" id="setup-btn-text">CONFIUGURE PC RIG</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative overflow-hidden pt-12 pb-16 border-b border-slate-900 bg-radial-at-t from-slate-900 via-slate-950 to-slate-950">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-950/20 via-transparent to-transparent opacity-80 pointer-events-none"></div>
+    <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/30 border border-cyan-800/30 text-cyan-400 text-xs font-semibold mb-6">
+        <i class="fa-solid fa-sparkles text-[10px]"></i>
+        <span>Advanced Hardware Scoring & Requirements Check</span>
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight mb-6">
+        Can Your PC Run the <br class="hidden sm:inline">
+        <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">Latest Next-Gen Games?</span>
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+        Input your system specs once, then instantly benchmark your setup against minimum and recommended specs for any modern release.
+      </p>
+
+      <!-- SEARCH BAR -->
+      <div class="max-w-2xl mx-auto relative group">
+        <div class="absolute -inset-1.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+        <div class="relative flex items-center bg-slate-900 border border-slate-700/80 rounded-2xl overflow-hidden focus-within:border-cyan-500 shadow-xl">
+          <div class="pl-5 text-slate-400">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+          </div>
+          <input type="text" id="game-search" oninput="filterGames()" placeholder="Search game, developer or genre (e.g. Cyberpunk, Rockstar, Shooter)..." class="w-full bg-transparent border-none py-5 px-4 text-slate-200 focus:outline-none placeholder-slate-500 font-medium text-base">
+          <div class="pr-3 flex items-center gap-1">
+            <span class="hidden md:inline-flex bg-slate-800 text-slate-400 text-[10px] font-bold px-2.5 py-1.5 rounded-lg border border-slate-700">CTRL + K</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+
+    <!-- RIG REQUIREMENT WARNING BANNER (Only shows if rig NOT set) -->
+    <div id="no-rig-banner" class="mb-12 bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border border-amber-500/20 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-glow relative overflow-hidden">
+      <div class="absolute top-0 right-0 p-8 text-amber-500/5 text-8xl pointer-events-none">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <div class="flex items-start gap-4 z-10">
+        <div class="bg-amber-500/10 text-amber-500 p-4 rounded-xl border border-amber-500/20 text-2xl shrink-0">
+          <i class="fa-solid fa-circle-exclamation animate-pulse"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-amber-400">System Hardware Not Configured</h3>
+          <p class="text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
+            To view detailed game comparisons and compatibility ratings, you must configure your processor, graphics card, RAM, and storage first.
+          </p>
+        </div>
+      </div>
+      <button onclick="openWizard()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3.5 px-8 rounded-xl text-sm transition duration-300 shadow-md shrink-0 w-full md:w-auto text-center flex items-center justify-center gap-2">
+        <i class="fa-solid fa-wand-magic-sparkles text-slate-950"></i>
+        Setup My System
+      </button>
+    </div>
+
+    <!-- RIG SPEC SHEET (Shows if rig IS set) -->
+    <div id="rig-spec-sheet" class="hidden mb-12 bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-glow">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+          <i class="fa-solid fa-gamepad text-cyan-400"></i> My Active PC Specifications
+        </h3>
+        <button onclick="openWizard()" class="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-medium bg-cyan-950/20 hover:bg-cyan-950/40 px-3 py-1.5 rounded-lg border border-cyan-800/30 transition">
+          <i class="fa-solid fa-pen-to-square"></i> Edit Rig
+        </button>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+        <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+          <span class="block text-[10px] text-slate-500 uppercase tracking-wider font-bold">Processor (CPU)</span>
+          <span id="active-cpu" class="text-sm font-bold text-slate-200 mt-1 block truncate">Not Set</span>
+        </div>
+        <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+          <span class="block text-[10px] text-slate-500 uppercase tracking-wider font-bold">Graphics Card (GPU)</span>
+          <span id="active-gpu" class="text-sm font-bold text-slate-200 mt-1 block truncate">Not Set</span>
+        </div>
+        <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+          <span class="block text-[10px] text-slate-500 uppercase tracking-wider font-bold">System Memory (RAM)</span>
+          <span id="active-ram" class="text-sm font-bold text-slate-200 mt-1 block">Not Set</span>
+        </div>
+        <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+          <span class="block text-[10px] text-slate-500 uppercase tracking-wider font-bold">Operating System</span>
+          <span id="active-os" class="text-sm font-bold text-slate-200 mt-1 block">Not Set</span>
+        </div>
+        <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800 col-span-2 sm:col-span-1">
+          <span class="block text-[10px] text-slate-500 uppercase tracking-wider font-bold">Storage Drive</span>
+          <span id="active-storage" class="text-sm font-bold text-slate-200 mt-1 block truncate">Not Set</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER & GAME GRID HEADER -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div>
+        <h2 class="text-2xl font-black tracking-tight flex items-center gap-2">
+          <i class="fa-solid fa-trophy text-amber-500"></i> Supported Game Profiles
+        </h2>
+        <p class="text-slate-400 text-xs mt-1">Select a game to benchmark your specifications and read requirement breakdowns.</p>
+      </div>
+
+      <!-- FILTER TABS -->
+      <div class="flex flex-wrap gap-2 w-full sm:w-auto" id="genre-filters">
+        <button onclick="filterGenre('All')" class="genre-btn active px-4 py-2 rounded-xl text-xs font-bold border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700 transition">All</button>
+        <button onclick="filterGenre('Action RPG')" class="genre-btn px-4 py-2 rounded-xl text-xs font-bold border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700 transition">Action RPG</button>
+        <button onclick="filterGenre('Action-Adventure')" class="genre-btn px-4 py-2 rounded-xl text-xs font-bold border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700 transition">Action-Adventure</button>
+        <button onclick="filterGenre('Shooter')" class="genre-btn px-4 py-2 rounded-xl text-xs font-bold border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700 transition">Shooter</button>
+        <button onclick="filterGenre('RPG')" class="genre-btn px-4 py-2 rounded-xl text-xs font-bold border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700 transition">RPG/Sci-Fi</button>
+      </div>
+    </div>
+
+    <!-- GAME CARDS GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="games-grid">
+      <!-- Generated Dynamically via JS -->
+    </div>
+
+    <!-- CUSTOM BENCHMARK CARD (Allow custom requirements) -->
+    <div class="mt-16 bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 shadow-glow flex flex-col lg:flex-row items-center justify-between gap-8">
+      <div class="max-w-xl">
+        <div class="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider inline-block mb-3 border border-blue-500/20 uppercase">
+          Custom Requirements Analyzer
+        </div>
+        <h3 class="text-2xl font-black text-slate-100">Benchmark an Unlisted Game</h3>
+        <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+          Found a game requirements list online that's not listed above? Input its specifications directly and our algorithm will cross-reference it against your PC stats!
+        </p>
+      </div>
+      <button onclick="openCustomGameModal()" class="bg-slate-800 hover:bg-slate-700 hover:border-blue-500 text-blue-400 hover:text-blue-300 border border-slate-700 py-4 px-8 rounded-2xl text-sm font-bold transition duration-300 shadow-md shrink-0 w-full lg:w-auto text-center flex items-center justify-center gap-2">
+        <i class="fa-solid fa-plus"></i> Analyze Custom Game Specs
+      </button>
+    </div>
+
+  </main>
+
+  <!-- WIZARD / PC CONFIGURATOR MODAL -->
+  <div id="wizard-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl transition-all scale-95 duration-300" id="wizard-box">
+      
+      <!-- HEADER -->
+      <div class="bg-slate-950 p-6 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-cyan-500/10 text-cyan-400 p-2 rounded-lg border border-cyan-500/20">
+            <i class="fa-solid fa-compass-drafting text-lg"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-black text-slate-100">System Spec Configurator</h3>
+            <span class="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Step-by-step Hardware Wizard</span>
+          </div>
+        </div>
+        <button onclick="closeWizard()" class="text-slate-500 hover:text-slate-300 text-xl transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="bg-slate-950/50 px-6 py-3 border-b border-slate-800/60 flex items-center justify-between text-xs font-semibold">
+        <div class="flex items-center gap-1.5" id="progress-step-1">
+          <span class="w-5 h-5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center text-[10px] font-bold">1</span>
+          <span class="text-cyan-400">Processor (CPU)</span>
+        </div>
+        <div class="h-px bg-slate-800 flex-grow mx-3"></div>
+        <div class="flex items-center gap-1.5" id="progress-step-2">
+          <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">2</span>
+          <span class="text-slate-400">Graphics (GPU)</span>
+        </div>
+        <div class="h-px bg-slate-800 flex-grow mx-3"></div>
+        <div class="flex items-center gap-1.5" id="progress-step-3">
+          <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold">3</span>
+          <span class="text-slate-400">Memory & Storage</span>
+        </div>
+      </div>
+
+      <!-- WIZARD FORM CONTENT -->
+      <form id="wizard-form" onsubmit="saveSystem(event)" class="p-6">
+        
+        <!-- STEP 1: CPU -->
+        <div id="step-cpu-panel" class="space-y-4">
+          <div class="mb-2">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">What processor is in your PC?</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"><i class="fa-solid fa-microchip"></i></span>
+              <input type="text" id="cpu-input" autocomplete="off" oninput="showCpuSuggestions()" placeholder="Type CPU (e.g. Intel Core i5-12400, Ryzen 5 5600X)..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3.5 pl-11 pr-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm font-semibold">
+              <div id="cpu-suggestions" class="absolute left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-slate-950 border border-slate-800 rounded-xl shadow-xl hidden z-50"></div>
+            </div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800/60 text-xs text-slate-400 leading-relaxed">
+            <span class="text-amber-500 font-bold block mb-1 uppercase"><i class="fa-solid fa-lightbulb"></i> Pro-Tip:</span>
+            Start typing "Core i" or "Ryzen" to search our active hardware scoring database for a perfect match. If your CPU isn't listed, simply type its full name!
+          </div>
+          <div class="pt-4 flex justify-end">
+            <button type="button" onclick="nextStep(2)" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 px-6 rounded-xl text-xs tracking-wider uppercase transition">Next: Graphics Card <i class="fa-solid fa-arrow-right ml-1"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 2: GPU -->
+        <div id="step-gpu-panel" class="space-y-4 hidden">
+          <div class="mb-2">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">What graphics card (GPU) do you use?</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"><i class="fa-solid fa-images"></i></span>
+              <input type="text" id="gpu-input" autocomplete="off" oninput="showGpuSuggestions()" placeholder="Type GPU (e.g. NVIDIA RTX 3060, Radeon RX 6700 XT)..." class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3.5 pl-11 pr-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm font-semibold">
+              <div id="gpu-suggestions" class="absolute left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-slate-950 border border-slate-800 rounded-xl shadow-xl hidden z-50"></div>
+            </div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-950/40 border border-slate-800/60 text-xs text-slate-400 leading-relaxed">
+            <span class="text-cyan-400 font-bold block mb-1 uppercase"><i class="fa-solid fa-shield-halved"></i> Accuracy Check:</span>
+            Selecting from autocomplete ensures accurate performance tiers comparison. Standard GPUs include memory sizes (VRAM) automatically!
+          </div>
+          <div class="pt-4 flex justify-between">
+            <button type="button" onclick="prevStep(1)" class="bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold py-3 px-5 rounded-xl text-xs tracking-wider uppercase transition"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+            <button type="button" onclick="nextStep(3)" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 px-6 rounded-xl text-xs tracking-wider uppercase transition">Next: System Stats <i class="fa-solid fa-arrow-right ml-1"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 3: SYSTEM STATS (RAM, OS, STORAGE) -->
+        <div id="step-stats-panel" class="space-y-5 hidden">
+          
+          <!-- RAM SELECTOR -->
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">System Memory (RAM)</label>
+            <div class="grid grid-cols-4 gap-2">
+              <label class="border border-slate-800 bg-slate-950 hover:border-slate-700 py-3 rounded-xl flex flex-col items-center cursor-pointer text-xs font-bold transition">
+                <input type="radio" name="ram-val" value="4" class="hidden">
+                <span>4 GB</span>
+              </label>
+              <label class="border border-slate-800 bg-slate-950 hover:border-slate-700 py-3 rounded-xl flex flex-col items-center cursor-pointer text-xs font-bold transition">
+                <input type="radio" name="ram-val" value="8" class="hidden">
+                <span>8 GB</span>
+              </label>
+              <label class="border border-slate-800 bg-slate-950 hover:border-slate-700 py-3 rounded-xl flex flex-col items-center cursor-pointer text-xs font-bold transition">
+                <input type="radio" name="ram-val" value="16" checked class="hidden">
+                <span class="text-cyan-400">16 GB</span>
+              </label>
+              <label class="border border-slate-800 bg-slate-950 hover:border-slate-700 py-3 rounded-xl flex flex-col items-center cursor-pointer text-xs font-bold transition">
+                <input type="radio" name="ram-val" value="32" class="hidden">
+                <span>32+ GB</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- STORAGE & FREE SPACE -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Drive Type</label>
+              <select id="storage-type" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-slate-200 focus:outline-none focus:border-cyan-500 text-xs font-bold">
+                <option value="SSD">SSD (Solid State)</option>
+                <option value="HDD">HDD (Mechanical)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Free Space (GB)</label>
+              <input type="number" id="storage-free" placeholder="e.g. 150" min="0" required class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-slate-200 focus:outline-none focus:border-cyan-500 text-xs font-bold">
+            </div>
+          </div>
+
+          <!-- OPERATING SYSTEM -->
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Operating System</label>
+            <select id="os-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-slate-200 focus:outline-none focus:border-cyan-500 text-xs font-bold">
+              <option value="Windows 11">Windows 11 (64-bit)</option>
+              <option value="Windows 10">Windows 10 (64-bit)</option>
+              <option value="Windows 8">Windows 8 / 8.1</option>
+              <option value="Windows 7">Windows 7 (Legacy)</option>
+            </select>
+          </div>
+
+          <div class="pt-4 flex justify-between">
+            <button type="button" onclick="prevStep(2)" class="bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold py-3 px-5 rounded-xl text-xs tracking-wider uppercase transition"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+            <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black py-3 px-8 rounded-xl text-xs tracking-wider uppercase transition shadow-neon-green">
+              <i class="fa-solid fa-circle-check mr-1"></i> Activate Hardware Config
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- GAME COMPARISON BREAKDOWN MODAL -->
+  <div id="comparison-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl transition-all scale-95 duration-300" id="comparison-box">
+      
+      <!-- HERO MODAL BANNER -->
+      <div class="relative h-48 md:h-64 overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center" id="comp-banner-bg"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+        <button onclick="closeComparison()" class="absolute top-5 right-5 z-20 bg-slate-950/60 hover:bg-slate-950 text-slate-200 w-10 h-10 rounded-full flex items-center justify-center transition border border-slate-800">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+        <div class="absolute bottom-6 left-6 right-6">
+          <span class="px-2.5 py-1 rounded bg-blue-600 text-slate-100 text-[10px] font-black uppercase tracking-wider mb-2 inline-block" id="comp-badge-genre">Action RPG</span>
+          <h2 class="text-2xl sm:text-4xl font-black tracking-tight" id="comp-title">Cyberpunk 2077</h2>
+          <p class="text-slate-300 text-xs sm:text-sm mt-1 line-clamp-1 opacity-90" id="comp-description"></p>
+        </div>
+      </div>
+
+      <!-- MAIN RESULTS CONTAINER -->
+      <div class="p-6 md:p-8 space-y-8 max-h-[60vh] overflow-y-auto">
+        
+        <!-- COMPATIBILITY VERDICT DASHBOARD -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          
+          <!-- MINIMUM BAR -->
+          <div class="col-span-1 md:col-span-5 bg-slate-950/50 p-5 rounded-2xl border border-slate-800 text-center relative overflow-hidden">
+            <span class="block text-[10px] text-slate-500 uppercase tracking-widest font-black">Minimum Specs Status</span>
+            <div id="verdict-min-badge" class="mt-4 text-2xl font-black uppercase flex items-center justify-center gap-2">
+              <!-- JS Injected badge -->
+            </div>
+            <p id="verdict-min-text" class="text-xs text-slate-400 mt-2">Determining capability...</p>
+          </div>
+
+          <!-- GRAPHICS SPLIT / VS -->
+          <div class="col-span-1 md:col-span-2 flex flex-col items-center justify-center">
+            <span class="text-slate-700 font-extrabold text-xl tracking-wider">VS</span>
+            <div class="h-10 w-px bg-slate-800 hidden md:block mt-2"></div>
+          </div>
+
+          <!-- RECOMMENDED BAR -->
+          <div class="col-span-1 md:col-span-5 bg-slate-950/50 p-5 rounded-2xl border border-slate-800 text-center">
+            <span class="block text-[10px] text-slate-500 uppercase tracking-widest font-black">Recommended Specs Status</span>
+            <div id="verdict-rec-badge" class="mt-4 text-2xl font-black uppercase flex items-center justify-center gap-2">
+              <!-- JS Injected badge -->
+            </div>
+            <p id="verdict-rec-text" class="text-xs text-slate-400 mt-2">Determining capability...</p>
+          </div>
+
+        </div>
+
+        <!-- BOTTLENECK & ADVICE WARNING -->
+        <div id="advice-banner" class="rounded-2xl p-5 border flex items-start gap-4 shadow-glow">
+          <div id="advice-icon-holder" class="p-3 rounded-xl border text-xl shrink-0"></div>
+          <div>
+            <h4 class="font-bold text-slate-100" id="advice-heading">Rig Advisor Breakdown</h4>
+            <p class="text-xs text-slate-400 mt-1 leading-relaxed" id="advice-description"></p>
+          </div>
+        </div>
+
+        <!-- COMPONENT BREAKDOWN GRID -->
+        <div>
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-cyan-400"></i> Side-By-Side Spec Diagnostics
+          </h3>
+
+          <div class="space-y-4">
+            <!-- CPU Row -->
+            <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div class="flex items-center gap-3 shrink-0">
+                <div class="bg-slate-900 text-slate-400 p-2.5 rounded-xl border border-slate-800 text-sm">
+                  <i class="fa-solid fa-microchip"></i>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-500 font-bold uppercase block tracking-wider">Processor (CPU)</span>
+                  <strong class="text-sm text-slate-200" id="diag-user-cpu">Your CPU</strong>
+                </div>
+              </div>
+              <div class="flex-grow grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Minimum Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-min-cpu"></span>
+                </div>
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Recommended Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-rec-cpu"></span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2" id="diag-cpu-verdict">
+                <!-- Status badging -->
+              </div>
+            </div>
+
+            <!-- GPU Row -->
+            <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div class="flex items-center gap-3 shrink-0">
+                <div class="bg-slate-900 text-slate-400 p-2.5 rounded-xl border border-slate-800 text-sm">
+                  <i class="fa-solid fa-images"></i>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-500 font-bold uppercase block tracking-wider">Graphics Card (GPU)</span>
+                  <strong class="text-sm text-slate-200" id="diag-user-gpu">Your GPU</strong>
+                </div>
+              </div>
+              <div class="flex-grow grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Minimum Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-min-gpu"></span>
+                </div>
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Recommended Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-rec-gpu"></span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2" id="diag-gpu-verdict"></div>
+            </div>
+
+            <!-- RAM Row -->
+            <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div class="flex items-center gap-3 shrink-0">
+                <div class="bg-slate-900 text-slate-400 p-2.5 rounded-xl border border-slate-800 text-sm">
+                  <i class="fa-solid fa-memory"></i>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-500 font-bold uppercase block tracking-wider">System Memory (RAM)</span>
+                  <strong class="text-sm text-slate-200" id="diag-user-ram">Your RAM</strong>
+                </div>
+              </div>
+              <div class="flex-grow grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Minimum Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-min-ram"></span>
+                </div>
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Recommended Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-rec-ram"></span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2" id="diag-ram-verdict"></div>
+            </div>
+
+            <!-- Storage Row -->
+            <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div class="flex items-center gap-3 shrink-0">
+                <div class="bg-slate-900 text-slate-400 p-2.5 rounded-xl border border-slate-800 text-sm">
+                  <i class="fa-solid fa-hard-drive"></i>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-500 font-bold uppercase block tracking-wider">Storage space</span>
+                  <strong class="text-sm text-slate-200" id="diag-user-storage">Your storage</strong>
+                </div>
+              </div>
+              <div class="flex-grow grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Minimum Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-min-storage"></span>
+                </div>
+                <div>
+                  <span class="text-slate-500 uppercase tracking-widest text-[9px] block">Recommended Requirement</span>
+                  <span class="font-bold text-slate-400" id="diag-rec-storage"></span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2" id="diag-storage-verdict"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FOOTER CLOSE BUTTON -->
+      <div class="bg-slate-950 p-5 border-t border-slate-800 flex justify-end gap-3">
+        <button onclick="closeComparison()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+          Close Breakdown
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CUSTOM GAME INPUT MODAL -->
+  <div id="custom-game-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="relative bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl transition-all scale-95 duration-300" id="custom-game-box">
+      
+      <!-- HEADER -->
+      <div class="bg-slate-950 p-6 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-blue-500/10 text-blue-400 p-2 rounded-lg border border-blue-500/20">
+            <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-black text-slate-100">Custom Game Specifications</h3>
+            <span class="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Input external game specifications</span>
+          </div>
+        </div>
+        <button onclick="closeCustomGameModal()" class="text-slate-500 hover:text-slate-300 text-xl transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="custom-game-form" onsubmit="runCustomGameBenchmark(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Game Title</label>
+          <input type="text" id="custom-title" required placeholder="e.g. Grand Theft Auto VI" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 text-sm font-semibold">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- MINIMUM -->
+          <div class="bg-slate-950/40 p-4 rounded-2xl border border-slate-800/80 space-y-3">
+            <h4 class="text-xs font-extrabold text-slate-300 uppercase tracking-wider border-b border-slate-800 pb-1.5">Minimum Requirements</h4>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Target CPU</label>
+              <input type="text" id="custom-min-cpu" required placeholder="e.g. Core i5-8400 / Ryzen 5 3600" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Target GPU</label>
+              <input type="text" id="custom-min-gpu" required placeholder="e.g. GTX 1060 / RX 580" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Required RAM (GB)</label>
+              <input type="number" id="custom-min-ram" required value="8" min="1" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Disk Size (GB)</label>
+              <input type="number" id="custom-min-size" required value="50" min="1" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+          </div>
+
+          <!-- RECOMMENDED -->
+          <div class="bg-slate-950/40 p-4 rounded-2xl border border-slate-800/80 space-y-3">
+            <h4 class="text-xs font-extrabold text-slate-300 uppercase tracking-wider border-b border-slate-800 pb-1.5">Recommended Requirements</h4>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Target CPU</label>
+              <input type="text" id="custom-rec-cpu" required placeholder="e.g. Core i7-12700 / Ryzen 7 7700" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Target GPU</label>
+              <input type="text" id="custom-rec-gpu" required placeholder="e.g. RTX 3060 / RX 6700 XT" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Required RAM (GB)</label>
+              <input type="number" id="custom-rec-ram" required value="16" min="1" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Disk Size (GB)</label>
+              <input type="number" id="custom-rec-size" required value="50" min="1" class="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-300 text-xs">
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800/60 flex justify-end gap-3">
+          <button type="button" onclick="closeCustomGameModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition">
+            Cancel
+          </button>
+          <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-slate-950 font-black py-2.5 px-8 rounded-xl text-xs uppercase tracking-wider transition shadow-neon-blue">
+            Benchmark Custom Game
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-slate-900 bg-slate-950 py-12 text-center text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-4">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-microchip text-slate-400"></i>
+        <span class="font-extrabold tracking-widest text-slate-400">SYSTEM SHIELD</span>
+      </div>
+      <p class="max-w-md">
+        Hardware scoring and benchmarking scores are estimations mapped against modern game requirements engine models for educational prototyping purposes.
+      </p>
+      <p class="text-slate-600 mt-4">
+        &copy; 2026 System Shield Inc. All Rig Rights Reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- IMPORT OUR DATA & CORE ALGORITHM -->
+  <script src="app.js"></script>
+
+  <!-- APP CONTROLLER SCRIPT -->
+  <script>
+    // App State Management
+    let userSystem = null;
+    let activeGenre = "All";
+    let activeWizardStep = 1;
+    let pendingGameAction = null; // Stores game ID if a user clicks a game which triggers system setup
+
+    // Initialize application on load
+    window.addEventListener("DOMContentLoaded", () => {
+      // Load saved configuration if it exists
+      const savedConfig = localStorage.getItem("system_shield_rig");
+      if (savedConfig) {
+        userSystem = JSON.parse(savedConfig);
+        updateSystemUI();
+      } else {
+        showNoRigState();
+      }
+
+      // Render the games
+      renderGamesList();
+
+      // Keyboard listener for Quick Search focus
+      window.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+          e.preventDefault();
+          document.getElementById("game-search").focus();
+        }
+      });
+    });
+
+    // Update UI elements depending on whether a rig has been configured
+    function updateSystemUI() {
+      if (!userSystem) {
+        showNoRigState();
+        return;
+      }
+
+      // Toggle panels
+      document.getElementById("no-rig-banner").classList.add("hidden");
+      document.getElementById("rig-spec-sheet").classList.remove("hidden");
+      document.getElementById("quick-spec-status").classList.remove("hidden");
+
+      // Set text fields in rig specification sheet
+      document.getElementById("active-cpu").textContent = userSystem.cpu;
+      document.getElementById("active-gpu").textContent = userSystem.gpu;
+      document.getElementById("active-ram").textContent = `${userSystem.ram} GB`;
+      document.getElementById("active-os").textContent = userSystem.os;
+      document.getElementById("active-storage").textContent = `${userSystem.storageFree} GB Free (${userSystem.storageType})`;
+
+      // Header state
+      document.getElementById("quick-rig-name").textContent = userSystem.gpu.replace("NVIDIA GeForce ", "").replace("AMD Radeon ", "");
+      document.getElementById("setup-btn-text").textContent = "MY RIG SPECIFICATIONS";
+      document.getElementById("setup-rig-btn").classList.remove("from-blue-600", "to-cyan-500");
+      document.getElementById("setup-rig-btn").classList.add("from-slate-800", "to-slate-700", "text-slate-200");
+      
+      const setupIcon = document.getElementById("setup-rig-btn").querySelector("i");
+      if (setupIcon) setupIcon.className = "fa-solid fa-circle-check text-emerald-400";
+
+      // Refresh games to show pass/fail badge values
+      renderGamesList();
+    }
+
+    // Reset status to no rig state
+    function showNoRigState() {
+      document.getElementById("no-rig-banner").classList.remove("hidden");
+      document.getElementById("rig-spec-sheet").classList.add("hidden");
+      document.getElementById("quick-spec-status").classList.add("hidden");
+      document.getElementById("setup-btn-text").textContent = "CONFIGURE PC RIG";
+      document.getElementById("setup-rig-btn").classList.add("from-blue-600", "to-cyan-500");
+      document.getElementById("setup-rig-btn").classList.remove("from-slate-800", "to-slate-700", "text-slate-200");
+      
+      const setupIcon = document.getElementById("setup-rig-btn").querySelector("i");
+      if (setupIcon) setupIcon.className = "fa-solid fa-gamepad text-slate-950";
+    }
+
+    // STEP-BY-STEP WIZARD ENGINE
+    function openWizard(gameIdTrigger = null) {
+      if (gameIdTrigger) {
+        pendingGameAction = gameIdTrigger;
+      }
+      
+      // Populate fields if we already have configuration saved
+      if (userSystem) {
+        document.getElementById("cpu-input").value = userSystem.cpu;
+        document.getElementById("gpu-input").value = userSystem.gpu;
+        document.getElementById("storage-type").value = userSystem.storageType;
+        document.getElementById("storage-free").value = userSystem.storageFree;
+        document.getElementById("os-select").value = userSystem.os;
+
+        const radios = document.getElementsByName("ram-val");
+        radios.forEach(radio => {
+          if (parseInt(radio.value) === userSystem.ram) {
+            radio.checked = true;
+          }
+        });
+      }
+
+      // Open Modal
+      activeWizardStep = 1;
+      showStep(1);
+      document.getElementById("wizard-modal").classList.remove("hidden");
+      setTimeout(() => {
+        document.getElementById("wizard-box").classList.remove("scale-95");
+        document.getElementById("wizard-box").classList.add("scale-100");
+      }, 50);
+    }
+
+    function closeWizard() {
+      document.getElementById("wizard-box").classList.remove("scale-100");
+      document.getElementById("wizard-box").classList.add("scale-95");
+      setTimeout(() => {
+        document.getElementById("wizard-modal").classList.add("hidden");
+        pendingGameAction = null;
+      }, 200);
+    }
+
+    function showStep(stepNum) {
+      activeWizardStep = stepNum;
+
+      // Toggle step panel visibility
+      document.getElementById("step-cpu-panel").classList.add("hidden");
+      document.getElementById("step-gpu-panel").classList.add("hidden");
+      document.getElementById("step-stats-panel").classList.add("hidden");
+
+      if (stepNum === 1) {
+        document.getElementById("step-cpu-panel").classList.remove("hidden");
+      } else if (stepNum === 2) {
+        document.getElementById("step-gpu-panel").classList.remove("hidden");
+      } else if (stepNum === 3) {
+        document.getElementById("step-stats-panel").classList.remove("hidden");
+      }
+
+      // Update progress graphics
+      for (let i = 1; i <= 3; i++) {
+        const stepBadge = document.getElementById(`progress-step-${i}`);
+        const circle = stepBadge.querySelector("span");
+        const text = stepBadge.querySelector("span:last-child");
+
+        if (i < stepNum) {
+          // Completed
+          circle.className = "w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-[10px] font-bold";
+          circle.innerHTML = '<i class="fa-solid fa-check"></i>';
+          text.className = "text-emerald-400";
+        } else if (i === stepNum) {
+          // Active
+          circle.className = "w-5 h-5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center text-[10px] font-bold";
+          circle.textContent = i;
+          text.className = "text-cyan-400";
+        } else {
+          // Future
+          circle.className = "w-5 h-5 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center text-[10px] font-bold";
+          circle.textContent = i;
+          text.className = "text-slate-400";
+        }
+      }
+    }
+
+    function nextStep(targetStep) {
+      // Validate step 1: CPU input cannot be empty
+      if (activeWizardStep === 1) {
+        const cpuIn = document.getElementById("cpu-input").value.trim();
+        if (!cpuIn) {
+          alert("Please type or select a CPU first!");
+          return;
+        }
+      }
+      // Validate step 2: GPU input cannot be empty
+      if (activeWizardStep === 2) {
+        const gpuIn = document.getElementById("gpu-input").value.trim();
+        if (!gpuIn) {
+          alert("Please type or select a GPU graphics card!");
+          return;
+        }
+      }
+      showStep(targetStep);
+    }
+
+    function prevStep(targetStep) {
+      showStep(targetStep);
+    }
+
+    // AUTOCOMPLETE FOR CPU & GPU
+    function showCpuSuggestions() {
+      const query = document.getElementById("cpu-input").value.toLowerCase();
+      const div = document.getElementById("cpu-suggestions");
+      div.innerHTML = "";
+
+      if (!query) {
+        div.classList.add("hidden");
+        return;
+      }
+
+      const matches = cpuDatabase.filter(cpu => cpu.name.toLowerCase().includes(query)).slice(0, 5);
+
+      if (matches.length > 0) {
+        div.classList.remove("hidden");
+        matches.forEach(cpu => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "w-full text-left px-4 py-2.5 hover:bg-slate-900 border-b border-slate-900 text-xs text-slate-300 flex items-center justify-between font-semibold transition";
+          btn.innerHTML = `
+            <span><i class="fa-solid fa-microchip text-cyan-500 mr-2"></i> ${cpu.name}</span>
+            <span class="text-[9px] bg-slate-800 text-slate-500 py-0.5 px-2 rounded font-bold">${cpu.brand}</span>
+          `;
+          btn.onclick = () => {
+            document.getElementById("cpu-input").value = cpu.name;
+            div.classList.add("hidden");
+          };
+          div.appendChild(btn);
+        });
+      } else {
+        // Option to use whatever they typed
+        div.classList.remove("hidden");
+        const customBtn = document.createElement("button");
+        customBtn.type = "button";
+        customBtn.className = "w-full text-left px-4 py-3 hover:bg-slate-900 text-xs text-slate-400 italic font-semibold";
+        customBtn.innerHTML = `<i class="fa-solid fa-plus text-slate-500 mr-2"></i> Use custom: "${document.getElementById("cpu-input").value}"`;
+        customBtn.onclick = () => {
+          div.classList.add("hidden");
+        };
+        div.appendChild(customBtn);
+      }
+    }
+
+    function showGpuSuggestions() {
+      const query = document.getElementById("gpu-input").value.toLowerCase();
+      const div = document.getElementById("gpu-suggestions");
+      div.innerHTML = "";
+
+      if (!query) {
+        div.classList.add("hidden");
+        return;
+      }
+
+      const matches = gpuDatabase.filter(gpu => gpu.name.toLowerCase().includes(query)).slice(0, 5);
+
+      if (matches.length > 0) {
+        div.classList.remove("hidden");
+        matches.forEach(gpu => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "w-full text-left px-4 py-2.5 hover:bg-slate-900 border-b border-slate-900 text-xs text-slate-300 flex items-center justify-between font-semibold transition";
+          btn.innerHTML = `
+            <span><i class="fa-solid fa-images text-cyan-500 mr-2"></i> ${gpu.name}</span>
+            <span class="text-[9px] bg-slate-800 text-slate-500 py-0.5 px-2 rounded font-bold">${gpu.brand}</span>
+          `;
+          btn.onclick = () => {
+            document.getElementById("gpu-input").value = gpu.name;
+            div.classList.add("hidden");
+          };
+          div.appendChild(btn);
+        });
+      } else {
+        div.classList.remove("hidden");
+        const customBtn = document.createElement("button");
+        customBtn.type = "button";
+        customBtn.className = "w-full text-left px-4 py-3 hover:bg-slate-900 text-xs text-slate-400 italic font-semibold";
+        customBtn.innerHTML = `<i class="fa-solid fa-plus text-slate-500 mr-2"></i> Use custom: "${document.getElementById("gpu-input").value}"`;
+        customBtn.onclick = () => {
+          div.classList.add("hidden");
+        };
+        div.appendChild(customBtn);
+      }
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener("click", (e) => {
+      if (e.target.id !== "cpu-input") {
+        document.getElementById("cpu-suggestions").classList.add("hidden");
+      }
+      if (e.target.id !== "gpu-input") {
+        document.getElementById("gpu-suggestions").classList.add("hidden");
+      }
+    });
+
+    // Save wizard details to system specs
+    function saveSystem(event) {
+      event.preventDefault();
+
+      const cpu = document.getElementById("cpu-input").value.trim();
+      const gpu = document.getElementById("gpu-input").value.trim();
+      const storageType = document.getElementById("storage-type").value;
+      const storageFree = parseInt(document.getElementById("storage-free").value);
+      const os = document.getElementById("os-select").value;
+
+      // Find checked RAM option
+      const radios = document.getElementsByName("ram-val");
+      let ram = 16;
+      radios.forEach(radio => {
+        if (radio.checked) {
+          ram = parseInt(radio.value);
+        }
+      });
+
+      userSystem = { cpu, gpu, ram, storageType, storageFree, os };
+
+      // Save to LocalStorage
+      localStorage.setItem("system_shield_rig", JSON.stringify(userSystem));
+
+      // Update UI panels
+      updateSystemUI();
+      closeWizard();
+
+      // If configuration was triggered by checking a specific game, run it immediately!
+      if (pendingGameAction) {
+        const gameId = pendingGameAction;
+        pendingGameAction = null;
+        checkGameCompatibility(gameId);
+      }
+    }
+
+
+    // GAME GRID RENDERING
+    function renderGamesList(filteredData = gamesDatabase) {
+      const grid = document.getElementById("games-grid");
+      grid.innerHTML = "";
+
+      if (filteredData.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 text-sm">
+            <i class="fa-solid fa-ban text-4xl text-slate-700 mb-4 block"></i>
+            No game profiles match your search criteria.
+          </div>
+        `;
+        return;
+      }
+
+      filteredData.forEach(game => {
+        const card = document.createElement("div");
+        card.className = "bg-slate-900 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700/80 hover:shadow-glow transition-all duration-300 flex flex-col group";
+
+        // Generate dynamic safety/compatibility badges if the user setup is active
+        let badgeHtml = "";
+        let btnText = "Analyze Compatibility";
+        let btnClass = "bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-blue-500 text-blue-400 hover:text-blue-300";
+
+        if (userSystem) {
+          const analysis = analyzeSystem(userSystem, game);
+          const passesMin = analysis.minimum.overallPass;
+          const passesRec = analysis.recommended.overallPass;
+
+          if (passesRec) {
+            badgeHtml = `
+              <div class="absolute top-4 left-4 bg-emerald-500 text-slate-950 text-[10px] font-black tracking-wider py-1 px-2.5 rounded-lg border border-emerald-400/20 shadow-neon-green uppercase flex items-center gap-1">
+                <i class="fa-solid fa-circle-check"></i> Passes Recommended
+              </div>
+            `;
+            btnText = "View Stable Settings";
+            btnClass = "bg-emerald-500 hover:bg-emerald-400 text-slate-950 border border-emerald-400/40 shadow-neon-green font-black";
+          } else if (passesMin) {
+            badgeHtml = `
+              <div class="absolute top-4 left-4 bg-amber-500 text-slate-950 text-[10px] font-black tracking-wider py-1 px-2.5 rounded-lg border border-amber-400/20 shadow-glow uppercase flex items-center gap-1">
+                <i class="fa-solid fa-triangle-exclamation"></i> Passes Minimum
+              </div>
+            `;
+            btnText = "Check Bottleneck Fixes";
+            btnClass = "bg-amber-500 hover:bg-amber-400 text-slate-950 border border-amber-400/40 shadow-glow font-black";
+          } else {
+            badgeHtml = `
+              <div class="absolute top-4 left-4 bg-red-600 text-slate-100 text-[10px] font-black tracking-wider py-1 px-2.5 rounded-lg border border-red-500/20 shadow-neon-red uppercase flex items-center gap-1">
+                <i class="fa-solid fa-circle-xmark animate-pulse"></i> Below Minimum
+              </div>
+            `;
+            btnText = "View Hardware Deficits";
+            btnClass = "bg-red-600 hover:bg-red-500 text-slate-100 border border-red-500/40 shadow-neon-red font-black";
+          }
+        } else {
+          // Gate specs: Ask user to set their components first
+          badgeHtml = `
+            <div class="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-sm text-amber-400 text-[9px] font-bold tracking-wider py-1.5 px-3 rounded-lg border border-amber-500/20 flex items-center gap-1">
+              <i class="fa-solid fa-lock"></i> Configure Rig to Unlock Specs
+            </div>
+          `;
+          btnText = "Set Rig & Check Compatibility";
+          btnClass = "bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-slate-950 font-bold shadow-neon-blue";
+        }
+
+        card.innerHTML = `
+          <div class="relative h-44 overflow-hidden shrink-0">
+            <img src="${game.imageUrl}" alt="${game.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+            ${badgeHtml}
+            <div class="absolute bottom-3 left-4">
+              <span class="text-[10px] uppercase font-bold text-cyan-400 bg-cyan-950/40 py-0.5 px-2 rounded border border-cyan-800/30">${game.genre}</span>
+            </div>
+          </div>
+          <div class="p-5 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-black text-slate-100 leading-tight group-hover:text-cyan-400 transition-colors">${game.title}</h3>
+              <p class="text-[11px] text-slate-500 mt-0.5 font-semibold">Released ${game.releaseYear} by ${game.developer}</p>
+              <p class="text-xs text-slate-400 mt-3 line-clamp-2 leading-relaxed">${game.description}</p>
+            </div>
+            
+            <button onclick="checkGameCompatibility('${game.id}')" class="w-full mt-6 py-3 px-4 rounded-xl text-xs font-bold transition duration-300 flex items-center justify-center gap-1.5 ${btnClass}">
+              <i class="fa-solid fa-crosshairs text-inherit"></i>
+              <span>${btnText}</span>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // FILTER FUNCTIONALITIES
+    function filterGames() {
+      const query = document.getElementById("game-search").value.toLowerCase();
+      let filtered = gamesDatabase;
+
+      if (query) {
+        filtered = filtered.filter(game => 
+          game.title.toLowerCase().includes(query) ||
+          game.developer.toLowerCase().includes(query) ||
+          game.genre.toLowerCase().includes(query)
+        );
+      }
+
+      if (activeGenre !== "All") {
+        filtered = filtered.filter(game => game.genre.toLowerCase() === activeGenre.toLowerCase());
+      }
+
+      renderGamesList(filtered);
+    }
+
+    function filterGenre(genreName) {
+      activeGenre = genreName;
+      
+      // Update active tabs styles
+      const filterBtns = document.querySelectorAll(".genre-btn");
+      filterBtns.forEach(btn => {
+        if (btn.textContent === genreName) {
+          btn.className = "genre-btn px-4 py-2 rounded-xl text-xs font-bold border border-cyan-500 bg-cyan-950/20 text-cyan-400 shadow-neon-cyan transition";
+        } else {
+          btn.className = "genre-btn px-4 py-2 rounded-xl text-xs font-bold border border-slate-800 bg-slate-900 text-slate-300 hover:border-slate-700 transition";
+        }
+      });
+
+      filterGames();
+    }
+
+
+    // BENCHMARK AND SPEC GATE CHECKER
+    function checkGameCompatibility(gameId) {
+      // REQUIREMENT CHECK: Ask user about specific components BEFORE showing requirements!
+      if (!userSystem) {
+        // Strict gate: Trigger setup configuration and store gameId so we resume upon completion
+        openWizard(gameId);
+        return;
+      }
+
+      const game = gamesDatabase.find(g => g.id === gameId);
+      if (!game) return;
+
+      // Render Modal elements
+      document.getElementById("comp-banner-bg").style.backgroundImage = `url('${game.imageUrl}')`;
+      document.getElementById("comp-title").textContent = game.title;
+      document.getElementById("comp-badge-genre").textContent = game.genre;
+      document.getElementById("comp-description").textContent = game.description;
+
+      const analysis = analyzeSystem(userSystem, game);
+
+      // Rendering Minimum specs verdicts
+      const minBadge = document.getElementById("verdict-min-badge");
+      const minText = document.getElementById("verdict-min-text");
+      if (analysis.minimum.overallPass) {
+        minBadge.className = "mt-4 text-2xl font-black uppercase text-emerald-400 flex items-center justify-center gap-2";
+        minBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> PASS';
+        minText.textContent = "Your PC meets the base configurations needed to load and execute the engine.";
+      } else {
+        minBadge.className = "mt-4 text-2xl font-black uppercase text-red-500 flex items-center justify-center gap-2";
+        minBadge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> FAIL';
+        minText.textContent = "PC hardware configuration is below requirements. Upgrades required.";
+      }
+
+      // Rendering Recommended specs verdicts
+      const recBadge = document.getElementById("verdict-rec-badge");
+      const recText = document.getElementById("verdict-rec-text");
+      if (analysis.recommended.overallPass) {
+        recBadge.className = "mt-4 text-2xl font-black uppercase text-emerald-400 flex items-center justify-center gap-2";
+        recBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> PASS';
+        recText.textContent = "Your PC matches recommended specs. Smooth, high-fidelity experience expected.";
+      } else {
+        recBadge.className = "mt-4 text-2xl font-black uppercase text-amber-500 flex items-center justify-center gap-2 border-b-none border-transparent";
+        recBadge.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> MARGINAL';
+        recText.textContent = "Capable of playing, but graphic scaling and FPS throttling may occur.";
+      }
+
+      // Advice banner
+      const banner = document.getElementById("advice-banner");
+      const adviceIcon = document.getElementById("advice-icon-holder");
+      const adviceHead = document.getElementById("advice-heading");
+      const adviceDesc = document.getElementById("advice-description");
+
+      if (analysis.recommended.overallPass) {
+        banner.className = "rounded-2xl p-5 border border-emerald-500/20 bg-emerald-950/20 flex items-start gap-4 shadow-neon-green";
+        adviceIcon.className = "p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xl shrink-0";
+        adviceIcon.innerHTML = '<i class="fa-solid fa-rocket animate-pulse"></i>';
+        adviceHead.textContent = "System Advice: Ultra Settings Recommended";
+        adviceDesc.textContent = analysis.recommendation;
+      } else if (analysis.minimum.overallPass) {
+        banner.className = "rounded-2xl p-5 border border-amber-500/20 bg-amber-950/20 flex items-start gap-4 shadow-glow";
+        adviceIcon.className = "p-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xl shrink-0";
+        adviceIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+        adviceHead.textContent = `Bottleneck Alert: ${analysis.bottleneck}`;
+        adviceDesc.textContent = analysis.recommendation;
+      } else {
+        banner.className = "rounded-2xl p-5 border border-red-500/20 bg-red-950/20 flex items-start gap-4 shadow-neon-red";
+        adviceIcon.className = "p-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 text-xl shrink-0";
+        adviceIcon.innerHTML = '<i class="fa-solid fa-skull-crossbones"></i>';
+        adviceHead.textContent = "System Alert: Unplayable Setup";
+        adviceDesc.textContent = analysis.recommendation;
+      }
+
+      // DIAGNOSTICS ROW-BY-ROW
+      document.getElementById("diag-user-cpu").textContent = analysis.minimum.components.cpu.realName;
+      document.getElementById("diag-min-cpu").textContent = game.requirements.minimum.cpu.name;
+      document.getElementById("diag-rec-cpu").textContent = game.requirements.recommended.cpu.name;
+      setDiagnosticBadge("cpu", analysis.minimum.components.cpu, analysis.recommended.components.cpu);
+
+      document.getElementById("diag-user-gpu").textContent = analysis.minimum.components.gpu.realName;
+      document.getElementById("diag-min-gpu").textContent = game.requirements.minimum.gpu.name;
+      document.getElementById("diag-rec-gpu").textContent = game.requirements.recommended.gpu.name;
+      setDiagnosticBadge("gpu", analysis.minimum.components.gpu, analysis.recommended.components.gpu);
+
+      document.getElementById("diag-user-ram").textContent = `${userSystem.ram} GB`;
+      document.getElementById("diag-min-ram").textContent = `${game.requirements.minimum.ram} GB`;
+      document.getElementById("diag-rec-ram").textContent = `${game.requirements.recommended.ram} GB`;
+      setDiagnosticBadge("ram", analysis.minimum.components.ram, analysis.recommended.components.ram);
+
+      document.getElementById("diag-user-storage").textContent = `${userSystem.storageFree} GB (${userSystem.storageType})`;
+      document.getElementById("diag-min-storage").textContent = `${game.requirements.minimum.storage.size} GB SSD/HDD`;
+      document.getElementById("diag-rec-storage").textContent = `${game.requirements.recommended.storage.size} GB SSD`;
+      setDiagnosticBadge("storage", analysis.minimum.components.storage, analysis.recommended.components.storage);
+
+      // Open Modal
+      document.getElementById("comparison-modal").classList.remove("hidden");
+      setTimeout(() => {
+        document.getElementById("comparison-box").classList.remove("scale-95");
+        document.getElementById("comparison-box").classList.add("scale-100");
+      }, 50);
+    }
+
+    function closeComparison() {
+      document.getElementById("comparison-box").classList.remove("scale-100");
+      document.getElementById("comparison-box").classList.add("scale-95");
+      setTimeout(() => {
+        document.getElementById("comparison-modal").classList.add("hidden");
+      }, 200);
+    }
+
+    // Set diagnostics visual state row badge
+    function setDiagnosticBadge(compId, minResult, recResult) {
+      const badgeHolder = document.getElementById(`diag-${compId}-verdict`);
+      badgeHolder.innerHTML = "";
+
+      if (recResult.pass) {
+        badgeHolder.className = "flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1.5 rounded-xl border border-emerald-500/20 font-bold uppercase";
+        badgeHolder.innerHTML = '<i class="fa-solid fa-circle-check"></i> Recommended';
+      } else if (minResult.pass) {
+        badgeHolder.className = "flex items-center gap-1.5 bg-amber-500/10 text-amber-400 text-xs px-3 py-1.5 rounded-xl border border-amber-500/20 font-bold uppercase";
+        badgeHolder.innerHTML = '<i class="fa-solid fa-circle-check"></i> Minimum';
+      } else {
+        badgeHolder.className = "flex items-center gap-1.5 bg-red-500/10 text-red-400 text-xs px-3 py-1.5 rounded-xl border border-red-500/20 font-bold uppercase";
+        badgeHolder.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Below Spec';
+      }
+    }
+
+
+    // CUSTOM GAME ANALYZER FORM
+    function openCustomGameModal() {
+      // STRICT REQUIREMENT CHECK BEFORE CUSTOM GAME ANALYZER
+      if (!userSystem) {
+        alert("Please set up your system hardware specifications before evaluating custom game profiles.");
+        openWizard();
+        return;
+      }
+
+      document.getElementById("custom-game-modal").classList.remove("hidden");
+      setTimeout(() => {
+        document.getElementById("custom-game-box").classList.remove("scale-95");
+        document.getElementById("custom-game-box").classList.add("scale-100");
+      }, 50);
+    }
+
+    function closeCustomGameModal() {
+      document.getElementById("custom-game-box").classList.remove("scale-100");
+      document.getElementById("custom-game-box").classList.add("scale-95");
+      setTimeout(() => {
+        document.getElementById("custom-game-modal").classList.add("hidden");
+      }, 200);
+    }
+
+    function runCustomGameBenchmark(event) {
+      event.preventDefault();
+
+      const title = document.getElementById("custom-title").value;
+      const minCpu = document.getElementById("custom-min-cpu").value;
+      const minGpu = document.getElementById("custom-min-gpu").value;
+      const minRam = parseInt(document.getElementById("custom-min-ram").value);
+      const minSize = parseInt(document.getElementById("custom-min-size").value);
+
+      const recCpu = document.getElementById("custom-rec-cpu").value;
+      const recGpu = document.getElementById("custom-rec-gpu").value;
+      const recRam = parseInt(document.getElementById("custom-rec-ram").value);
+      const recSize = parseInt(document.getElementById("custom-rec-size").value);
+
+      // Create synthetic game profile
+      const syntheticGame = {
+        id: "custom_analyzer",
+        title: title,
+        genre: "Custom Analysis",
+        releaseYear: 2026,
+        developer: "User Defined Specification",
+        imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80",
+        description: "Benchmark evaluation against custom system parameters uploaded by the client.",
+        requirements: {
+          minimum: {
+            cpu: { name: minCpu },
+            gpu: { name: minGpu },
+            ram: minRam,
+            os: "Windows 10",
+            storage: { type: "HDD", size: minSize }
+          },
+          recommended: {
+            cpu: { name: recCpu },
+            gpu: { name: recGpu },
+            ram: recRam,
+            os: "Windows 10",
+            storage: { type: "SSD", size: recSize }
+          }
+        }
+      };
+
+      // Close custom modal & open comparison panel utilizing the custom game profile
+      closeCustomGameModal();
+      
+      // Inject synthetic game temporarily to memory so analyzeSystem finds it
+      gamesDatabase.push(syntheticGame);
+      checkGameCompatibility(syntheticGame.id);
+
+      // Remove after evaluation to keep standard database pure
+      setTimeout(() => {
+        const idx = gamesDatabase.findIndex(g => g.id === syntheticGame.id);
+        if (idx > -1) gamesDatabase.splice(idx, 1);
+      }, 5000);
+    }
+
+  </script>
+</body>
+</html>
